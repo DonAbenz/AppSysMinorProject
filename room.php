@@ -24,7 +24,7 @@ include("header.php");
                         if($_SESSION["type"] == 'master'){
                     ?>
 					<div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right">
-						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#userModal" class="btn btn-success btn-xs">Add New Room</button>
+						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#roomModal" class="btn btn-success btn-xs">Add New Room</button>
                     </div>
                     <?php
                         }
@@ -58,7 +58,7 @@ include("header.php");
 		</div>
 	</div>
 </div>
-<div id="userModal" class="modal fade">
+<div id="roomModal" class="modal fade">
 	<div class="modal-dialog">
 		<form method="post" id="room_form">
 			<div class="modal-content">
@@ -136,7 +136,7 @@ include("header.php");
 				success:function(data)
 				{
 					$('#room_form')[0].reset();
-					$('#userModal').modal('hide');
+					$('#roomModal').modal('hide');
 					$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
 					$('#action').attr('disabled', false);
 					userdataTable.ajax.reload();
@@ -145,7 +145,7 @@ include("header.php");
 		});
 
 		$(document).on('click', '.update', function(){
-			var room_id = $(this).attr("room_id");
+			var room_id = $(this).attr("id");
 			var btn_action = 'fetch_single';
 			$.ajax({
 				url:"room_action.php",
@@ -154,7 +154,7 @@ include("header.php");
 				dataType:"json",
 				success:function(data)
 				{
-					$('#userModal').modal('show');
+					$('#roomModal').modal('show');
 					$('#room_no').val(data.room_no);
 					$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Room");
 					$('#room_id').val(room_id);
@@ -165,14 +165,14 @@ include("header.php");
 		});
 
 		$(document).on('click', '.delete', function(){
-			var user_id = $(this).attr("id");
+			var room_id = $(this).attr("id");
 			var btn_action = "delete";
-			if(confirm("Are you sure you want to delete this user?"))
+			if(confirm("Are you sure you want to delete this room?"))
 			{
 				$.ajax({
-					url:"user_action.php",
+					url:"room_action.php",
 					method:"POST",
-					data:{user_id:user_id, btn_action:btn_action},
+					data:{room_id:room_id, btn_action:btn_action},
 					success:function(data)
 					{
 						$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');

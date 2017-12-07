@@ -38,36 +38,25 @@ if(isset($_POST['btn_action'])){
         foreach($result as $row)
         {
             $output['room_no'] = $row['room_no'];
+            $output['status'] = $row['status'];
         }
         echo json_encode($output);
     }
 
     if($_POST['btn_action'] == 'Edit'){
-        if($_POST['user_password'] != '')
-        {
-            $query = "
-            UPDATE user_details SET 
-            user_name = '".$_POST["user_name"]."', 
-            user_email = '".$_POST["user_email"]."',
-            user_password = '".password_hash($_POST["user_password"], PASSWORD_DEFAULT)."' 
-            WHERE user_id = '".$_POST["user_id"]."'
-            ";
-        }
-        else
-        {
-            $query = "
-            UPDATE user_details SET 
-            user_name = '".$_POST["user_name"]."', 
-            user_email = '".$_POST["user_email"]."'
-            WHERE user_id = '".$_POST["user_id"]."'
-            ";
-        }
+
+        $query = "
+        UPDATE room SET 
+        room_no = '".$_POST["room_no"]."', 
+        status = '".$_POST["status"]."'
+        WHERE room_id = '".$_POST["room_id"]."'";
+       
         $statement = $connect->prepare($query);
         $statement->execute();
         $result = $statement->fetchAll();
         if(isset($result))
         {
-            echo 'User Details Edited';
+            echo 'Room Details Edited';
         }
     }
 
@@ -79,7 +68,7 @@ if(isset($_POST['btn_action'])){
         $statement = $connect->prepare($query);
         $statement->execute(
             array(
-                ':room_id'  => $_POST["room_id"]
+                ':room_id'  => $_POST['room_id']
             )
         ); 
         echo 'Room deleted';   
