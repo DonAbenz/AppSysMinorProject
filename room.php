@@ -7,11 +7,6 @@ if(!isset($_SESSION["type"]))
 	header('location:login.php');
 }
 
-if($_SESSION["type"] != 'master')
-{
-	header("location:index.php");
-}
-
 include("header.php");
 
 
@@ -23,27 +18,38 @@ include("header.php");
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
-						<h3 class="panel-title">User List</h3>
+						<h3 class="panel-title">Room List</h3>
 					</div>
+                    <?php
+                        if($_SESSION["type"] == 'master'){
+                    ?>
 					<div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right">
-						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#userModal" class="btn btn-success btn-xs">Add New User</button>
-					</div>
+						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#userModal" class="btn btn-success btn-xs">Add New Room</button>
+                    </div>
+                    <?php
+                        }
+                    ?>
 				</div>
 
 				<div class="clear:both"></div>
 			</div>
 			<div class="panel-body">
 				<div class="row"><div class="col-sm-12 table-responsive">
-					<table id="user_data" class="table table-bordered table-striped">
+					<table id="room_data" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>ID</th>
-								<th>Email</th>
-								<th>Name</th>
+								<th>Room Number</th>
+								<th>Room Type</th>
 								<th>Status</th>
-								<th>Edit</th>
+                                <th>Max Capacity</th>
+                                <?php
+                                    if($_SESSION["type"] == 'master'){
+                                ?>
+                                <th>Edit</th>
 								<th></th>
-								<th></th>
+                                <?php
+                                    }
+                                ?>
 							</tr>
 						</thead>
 					</table>
@@ -54,28 +60,35 @@ include("header.php");
 </div>
 <div id="userModal" class="modal fade">
 	<div class="modal-dialog">
-		<form method="post" id="user_form">
+		<form method="post" id="room_form">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title"><i class="fa fa-plus"></i> Add User</h4>
+					<h4 class="modal-title"><i class="fa fa-plus"></i> Add Room</h4>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label>Enter User Name</label>
-						<input type="text" name="user_name" id="user_name" class="form-control" required />
+						<label>Enter Room Number</label>
+						<input type="text" name="room_no" id="room_no" class="form-control" required />
 					</div>
 					<div class="form-group">
-						<label>Enter User Email</label>
-						<input type="email" name="user_email" id="user_email" class="form-control" required />
+						<label>Enter Room Type ID</label>
+						<select name="room_type_id">
+                            <option value="1">Regular 1A</option>
+                            <option value="2">Regular 1B</option>
+                            <option value="3">King 1A</option>
+                            <option value="4">King 1B</option>
+                        </select>
 					</div>
-					<div class="form-group">
-						<label>Enter User Password</label>
-						<input type="password" name="user_password" id="user_password" class="form-control" required />
+                    <div class="form-group">
+						<label>Room Status</label>
+						<input type="radio" name="status" value="vacant" checked >  Vacant
+                        <input type="radio" name="status" value="occupied" >    Occupied </input>
 					</div>
+
 				</div>
 				<div class="modal-footer">
-					<input type="hidden" name="user_id" id="user_id" />
+					<input type="hidden" name="room_id" id="room_id" />
 					<input type="hidden" name="btn_action" id="btn_action" />
 					<input type="submit" name="action" id="action" class="btn btn-info" value="Add" />
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -89,40 +102,40 @@ include("header.php");
 	$(document).ready(function(){
 
 		$('#add_button').click(function(){
-			$('#user_form')[0].reset();
-			$('.modal-title').html("<i class='fa fa-plus'></i> Add User");
+			$('#room_form')[0].reset();
+			$('.modal-title').html("<i class='fa fa-plus'></i> Add Room");
 			$('#action').val("Add");
 			$('#btn_action').val("Add");
 		});
 
-		var userdataTable = $('#user_data').DataTable({ //.DataTable = jQuery plugin = https://datatables.net/
+		var userdataTable = $('#room_data').DataTable({ //.DataTable = jQuery plugin = https://datatables.net/
 			"processing": true,
 			"serverSide": true,
 			"order": [],
 			"ajax":{
-				url:"user_fetch.php",
+				url:"room_fetch.php",
 				type:"POST"
 			},
 			"columnDefs":[
 			{
-				"target":[4,5],
+				"target":[4,7],
 				"orderable":false
 			}
 			],
-			"pageLength": 5
+			"pageLength": 6
 		});
 
-		$(document).on('submit', '#user_form', function(event){
+		$(document).on('submit', '#room_form', function(event){
 			event.preventDefault();
 			$('#action').attr('disabled','disabled');
 			var form_data = $(this).serialize();
 			$.ajax({
-				url:"user_action.php",
+				url:"room_action.php",
 				method:"POST",
 				data:form_data,
 				success:function(data)
 				{
-					$('#user_form')[0].reset();
+					$('#room_form')[0].reset();
 					$('#userModal').modal('hide');
 					$('#alert_action').fadeIn().html('<div class="alert alert-success">'+data+'</div>');
 					$('#action').attr('disabled', false);
@@ -132,48 +145,23 @@ include("header.php");
 		});
 
 		$(document).on('click', '.update', function(){
-			var user_id = $(this).attr("id");
+			var room_id = $(this).attr("room_id");
 			var btn_action = 'fetch_single';
 			$.ajax({
-				url:"user_action.php",
+				url:"room_action.php",
 				method:"POST",
-				data:{user_id:user_id, btn_action:btn_action},
+				data:{room_id:room_id, btn_action:btn_action},
 				dataType:"json",
 				success:function(data)
 				{
 					$('#userModal').modal('show');
-					$('#user_name').val(data.user_name);
-					$('#user_email').val(data.user_email);
-					$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit User");
-					$('#user_id').val(user_id);
+					$('#room_no').val(data.room_no);
+					$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Room");
+					$('#room_id').val(room_id);
 					$('#action').val('Edit');
 					$('#btn_action').val('Edit');
-					$('#user_password').attr('required', false);
 				}
 			})
-		});
-
-		$(document).on('click', '.change', function(){
-			var user_id = $(this).attr("id");
-			var status = $(this).data('status');
-			var btn_action = "change";
-			if(confirm("Are you sure you want to change status?"))
-			{
-				$.ajax({
-					url:"user_action.php",
-					method:"POST",
-					data:{user_id:user_id, status:status, btn_action:btn_action},
-					success:function(data)
-					{
-						$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
-						userdataTable.ajax.reload();
-					}
-				})
-			}
-			else
-			{
-				return false;
-			}
 		});
 
 		$(document).on('click', '.delete', function(){
