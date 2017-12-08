@@ -72,7 +72,9 @@ if(isset($_POST["login"]))
             <div class="panel-heading">Login</div>
             <div class="panel-body">
                 <form method="post">
-                    <?php echo $message; ?>
+                    <div align="center" class="form-group">
+                        <?php echo $message; ?>
+                    </div>
                     <div class="form-group">
                         <label>User Email</label>
                         <input type="text" name="user_email" class="form-control" required />
@@ -81,7 +83,7 @@ if(isset($_POST["login"]))
                         <label>Password</label>
                         <input type="password" name="user_password" class="form-control" required />
                     </div>
-                    <div class="form-group">
+                    <div align="center" class="form-group">
                         <input type="submit" name="login" value="Login" class="btn btn-info" />
                     </div>
                 </form>

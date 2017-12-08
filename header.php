@@ -20,7 +20,7 @@
 			<nav class="navbar navbar-inverse">
 				<div class="container-fluid">
 					<div class="navbar-header">
-						<a href="index.php" class="navbar-brand">Hotel Status</a>
+						<a href="index.php" class="navbar-brand"><span class="glyphicon glyphicon-home"></span> Hotel Status</a>
 					</div>
 					<ul class="nav navbar-nav">
 						<?php
@@ -28,13 +28,15 @@
 							?>
 							<li><a href="room.php">Rooms</a></li>
 							<li><a href="#">Guests</a></li>
+							<li><a href="#">Profit</a></li>
 							<li><a href="#">Next Checkouts</a></li>
-							<li><a href="user.php">User</a></li>
+							<li><a href="user.php"> <span class="glyphicon glyphicon-user"></span> User</a></li>
 							<?php
 						}else{
 							?>
 							<li><a href="room.php">Rooms</a></li>
 							<li><a href="#">Guests</a></li>
+							<li><a href="#">Profit</a></li>
 							<li><a href="#">Next Checkouts</a></li>
 							<?php
 						}
@@ -45,8 +47,8 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> <?php echo $_SESSION["user_name"]; ?></a>
 							<ul class="dropdown-menu">
-								<li><a href="profile.php">Profile</a></li>
-								<li><a href="logout.php">Logout</a></li>
+								<li><a href="profile.php"><span class="glyphicon glyphicon-floppy-disk"></span> Profile</a></li>
+								<li><a href="logout.php"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
 							</ul>
 						</li>
 					</ul>

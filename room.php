@@ -18,7 +18,7 @@ include("header.php");
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
-						<h3 class="panel-title">Room List</h3>
+						<h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span> Room List</h3>
 					</div>
                     <?php
                         if($_SESSION["type"] == 'master'){
@@ -40,8 +40,8 @@ include("header.php");
 							<tr>
 								<th>Room Number</th>
 								<th>Room Type</th>
+								<th>Room Bedding</th>
 								<th>Status</th>
-                                <th>Max Capacity</th>
                                 <?php
                                     if($_SESSION["type"] == 'master'){
                                 ?>
@@ -68,22 +68,27 @@ include("header.php");
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label>Enter Room Number</label>
-						<input type="text" name="room_no" id="room_no" class="form-control" required />
-					</div>
-					<div class="form-group">
-						<label>Enter Room Type ID</label>
-						<select name="room_type_id">
-                            <option value="1">Regular 1A</option>
-                            <option value="2">Regular 1B</option>
-                            <option value="3">King 1A</option>
-                            <option value="4">King 1B</option>
+						<label>Room Type</label>
+						<select name="room_type">
+                            <option value="Regular Room">Regular Room</option>
+                            <option value="Deluxe Room">Deluxe Room</option>
+                            <option value="Premium Room">Premium Room</option>
                         </select>
 					</div>
                     <div class="form-group">
+						<label>Room Bedding</label>
+						<select name="room_bedding">
+                            <option value="Single">Single</option>
+                            <option value="Double">Double</option>
+                            <option value="Triple">Triple</option>
+                            <option value="Quad">Quad</option>
+                        </select>
+					</div><div class="form-group">
 						<label>Room Status</label>
-						<input type="radio" name="status" value="vacant" checked >  Vacant
-                        <input type="radio" name="status" value="occupied" >    Occupied </input>
+						<select name="room_status">
+                            <option value="vacant">Vacant</option>
+                            <option value="occupied">Occupied</option>
+                        </select>
 					</div>
 
 				</div>
@@ -155,7 +160,7 @@ include("header.php");
 				success:function(data)
 				{
 					$('#roomModal').modal('show');
-					$('#room_no').val(data.room_no);
+					$('#room_type').val(data.room_type);
 					$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Room");
 					$('#room_id').val(room_id);
 					$('#action').val('Edit');

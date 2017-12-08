@@ -8,14 +8,13 @@ $query = '';
 $output = array();
 
 $query .= "
-SELECT * FROM room 
-INNER JOIN room_type ON room_type.room_type_id = room.room_type_id WHERE";
+SELECT * FROM room WHERE";
 
 if(isset($_POST["search"]["value"]))
-{
-	$query .= '(room_no LIKE "%'.$_POST["search"]["value"].'%" ';
-	$query .= 'OR status LIKE "%'.$_POST["search"]["value"].'%" ';
-	$query .= 'OR description LIKE "%'.$_POST["search"]["value"].'%") ';
+{	
+	$query .= '(type LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR bedding LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR place LIKE "%'.$_POST["search"]["value"].'%") ';
 }
 
 if(isset($_POST["order"]))
@@ -24,7 +23,7 @@ if(isset($_POST["order"]))
 }
 else
 {
-	$query .= 'ORDER BY room_id DESC ';
+	$query .= 'ORDER BY id DESC ';
 }
 
 if($_POST["length"] != -1)
@@ -45,7 +44,7 @@ $filtered_rows = $statement->rowCount();
 foreach($result as $row)
 {
 	$status = '';
-	if($row["status"] == 'vacant')
+	if($row["place"] == 'vacant')
 	{
 		$status = '<span class="label label-success">Vacant</span>';
 	}
@@ -54,12 +53,12 @@ foreach($result as $row)
 		$status = '<span class="label label-danger">Occupied</span>';
 	}
 	$sub_array = array();
-	$sub_array[] = $row['room_no'];
-	$sub_array[] = $row['description'];
+	$sub_array[] = $row['id'];
+	$sub_array[] = $row['type'];
+	$sub_array[] = $row['bedding'];
 	$sub_array[] = $status;
-	$sub_array[] = $row['max_capacity'];
-	$sub_array[] = '<button type="button" name="update" id="'.$row["room_id"].'" class="btn btn-warning btn-xs update">Update</button>';
-	$sub_array[] = '<button type="button" name="delete" id="'.$row["room_id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["status"].'">Delete</button>';
+	$sub_array[] = '<button type="button" name="update" id="'.$row["id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit"></span> Update</button>';
+	$sub_array[] = '<button type="button" name="delete" id="'.$row["id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["place"].'"><span class="glyphicon glyphicon-remove"></span> Delete</button>';
 	$data[] = $sub_array;
 }
 

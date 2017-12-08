@@ -23,7 +23,7 @@ include("header.php");
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
-						<h3 class="panel-title">User List</h3>
+						<h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span> User List</h3>
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right">
 						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#userModal" class="btn btn-success btn-xs">Add New User</button>
