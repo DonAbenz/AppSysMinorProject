@@ -27,15 +27,14 @@
 						if($_SESSION['type'] == 'master'){
 							?>
 							<li><a href="room.php">Rooms</a></li>
-							<li><a href="#">Guests</a></li>
+							<li><a href="booking.php">Booking</a></li>
 							<li><a href="#">Profit</a></li>
-							<li><a href="#">Next Checkouts</a></li>
 							<li><a href="user.php"> <span class="glyphicon glyphicon-user"></span> User</a></li>
 							<?php
 						}else{
 							?>
 							<li><a href="room.php">Rooms</a></li>
-							<li><a href="#">Guests</a></li>
+							<li><a href="booking.php">Booking</a></li>
 							<li><a href="#">Profit</a></li>
 							<li><a href="#">Next Checkouts</a></li>
 							<?php

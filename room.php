@@ -83,7 +83,8 @@ include("header.php");
                             <option value="Triple">Triple</option>
                             <option value="Quad">Quad</option>
                         </select>
-					</div><div class="form-group">
+					</div>
+					<div class="form-group">
 						<label>Room Status</label>
 						<select name="room_status">
                             <option value="vacant">Vacant</option>
