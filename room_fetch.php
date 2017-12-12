@@ -58,7 +58,7 @@ foreach($result as $row)
 	$sub_array[] = $row['bedding'];
 	$sub_array[] = $status;
 	$sub_array[] = '<button type="button" name="update" id="'.$row["id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit"></span> Update</button>';
-	$sub_array[] = '<button type="button" name="delete" id="'.$row["id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["place"].'"><span class="glyphicon glyphicon-remove"></span> Delete</button>';
+	$sub_array[] = '<button type="button" name="delete" id="'.$row["id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["place"].'"><span class="glyphicon glyphicon-trash"></span> Delete</button>';
 	$data[] = $sub_array;
 }
 

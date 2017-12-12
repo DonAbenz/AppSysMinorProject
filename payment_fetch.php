@@ -8,20 +8,16 @@ $query = '';
 $output = array();
 
 $query .= "
-SELECT * FROM roombook 
-WHERE stat = 'Not Confirm' AND
-";
+SELECT * FROM roombook WHERE stat = 'Confirmed' AND";
 
 if(isset($_POST["search"]["value"]))
-{
-	$query .= '(FName LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR LName LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR Email LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR id LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR cin LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR cout LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR TRoom LIKE "%'.$_POST["search"]["value"].'%" ';
-	$query .= 'OR stat LIKE "%'.$_POST["search"]["value"].'%") ';
+{	
+	$query .= '(id LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR Email LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR FName LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR cin LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR cout LIKE "%'.$_POST["search"]["value"].'%" )';
+	
 }
 
 if(isset($_POST["order"]))
@@ -52,15 +48,15 @@ foreach($result as $row)
 {
 	
 	$sub_array = array();
-	$sub_array[] = $row['id'];
-	$sub_array[] = $row['FName'];
-    $sub_array[] = $row['Email'];
-    $sub_array[] = $row['Bed'];
+	$sub_array[] = $row['FName'].'&nbsp;&nbsp;'.$row['LName'];
     $sub_array[] = $row['TRoom'];
-    $sub_array[] = $row['Meal'];
+    $sub_array[] = $row['Bed'];
+    $sub_array[] = $row['NRoom'];
     $sub_array[] = $row['cin'];
     $sub_array[] = $row['cout'];
-	$sub_array[] = '<button type="button" name="delete" book_id="'.$row["id"].'" class="btn btn-danger btn-xs delete" data-status="'.'"><span class="glyphicon glyphicon-remove"></span> Delete</button>';
+    $sub_array[] = $row['Meal'];
+    $sub_array[] = $row['nodays'];
+	$sub_array[] = '<a href="payment_order.php?pdf=1&id='.$row["id"].'" class="btn btn-info btn-xs">View PDF</a>';
 	$data[] = $sub_array;
 }
 

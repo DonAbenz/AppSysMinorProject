@@ -1,4 +1,5 @@
 <?php require_once("connect.php"); ?>
+<?php require_once("function.php"); ?>
 <?php
 //user_action.php
 
@@ -12,6 +13,8 @@ function diff($date1, $date2) {
     } 
     return $count; 
 } 
+
+
 
 
 if(isset($_POST['btn_action'])){
@@ -50,4 +53,33 @@ if(isset($_POST['btn_action'])){
     }
 
 }
+
+
+if($_POST['btn_action'] == 'delete'){
+	
+		// $query = "UPDATE roombook SET stat = 'Confirmed' WHERE id = :book_id" ;
+		
+		// $statement = $connect->prepare($query);
+
+		// $statement->execute(
+		// 	array(
+        //         ':book_id'  => $_POST["book_id"]
+        //     )
+		// );
+
+		// $result = $statement->fetchAll();
+        
+        move_guest_info($_POST["book_id"], $connect);
+	
+    }
+		
+		
+	
+      
+    
+	
+	
+	
+	
+
 ?>

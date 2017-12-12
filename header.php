@@ -20,22 +20,22 @@
 			<nav class="navbar navbar-inverse">
 				<div class="container-fluid">
 					<div class="navbar-header">
-						<a href="index.php" class="navbar-brand"><span class="glyphicon glyphicon-home"></span> Hotel Status</a>
+						<a href="index.php" class="navbar-brand"><span class="glyphicon glyphicon-dashboard"></span> Hotel Status</a>
 					</div>
 					<ul class="nav navbar-nav">
 						<?php
 						if($_SESSION['type'] == 'master'){
 							?>
-							<li><a href="room.php">Rooms</a></li>
-							<li><a href="booking.php">Booking</a></li>
-							<li><a href="#">Profit</a></li>
+							<li><a href="room.php"><span class="glyphicon glyphicon-tag"></span> Rooms</a></li>
+							<li><a href="booking.php"><span class="glyphicon glyphicon-calendar"></span> Booking</a></li>
+							<li><a href="payment.php"><span class="glyphicon glyphicon-usd"></span> Payment</a></li>
 							<li><a href="user.php"> <span class="glyphicon glyphicon-user"></span> User</a></li>
 							<?php
 						}else{
 							?>
-							<li><a href="room.php">Rooms</a></li>
-							<li><a href="booking.php">Booking</a></li>
-							<li><a href="#">Profit</a></li>
+							<li><a href="room.php"><span class="glyphicon glyphicon-tag"></span> Rooms</a></li>
+							<li><a href="booking.php"><span class="glyphicon glyphicon-calendar"></span> Booking</a></li>
+							<li><a href="payment.php"><span class="glyphicon glyphicon-usd"></span> Payment</a></li>
 							<li><a href="#">Next Checkouts</a></li>
 							<?php
 						}

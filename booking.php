@@ -37,6 +37,7 @@ include("header.php");
 					<table id="booking_data" class="table table-bordered table-striped">
 						<thead>
 							<tr>
+								<th>ID</th>
 								<th>Name</th>
 								<th>Email</th>
 								<th>Bedding</th>
@@ -44,7 +45,7 @@ include("header.php");
 								<th>Meal</th>
 								<th>Check In</th>
 								<th>Chech Out</th>
-								<th>Status</th>
+								<th></th>
 							</tr>
 						</thead>
 					</table>
@@ -126,7 +127,7 @@ include("header.php");
                     </div>
                 </div>
 				<div class="modal-footer">
-					<input type="hidden" name="user_id" id="user_id" />
+					<input type="hidden" name="book_id" id="book_id" />
 					<input type="hidden" name="btn_action" id="btn_action" />
 					<input type="submit" name="action" id="action" class="btn btn-info" value="Add" />
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -160,7 +161,7 @@ include("header.php");
 				"orderable":false
 			}
 			],
-			"pageLength": 5
+			"pageLength": 10
         });
         
         $(document).on('submit', '#user_form', function(event){
@@ -180,6 +181,29 @@ include("header.php");
 					userdataTable.ajax.reload();
 				}
 			})
+		});
+		
+		
+		$(document).on('click', '.delete', function(){
+			var book_id = $(this).attr("book_id");
+			var btn_action = "delete";
+			if(confirm("Confirm booking?"))
+			{
+				$.ajax({
+					url:"booking_action.php",
+					method:"POST",
+					data:{book_id:book_id, btn_action:btn_action},
+					success:function(data)
+					{
+						$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+						userdataTable.ajax.reload();
+					}
+				})
+			}
+			else
+			{
+				return false;
+			}
 		});
 	});
 </script>

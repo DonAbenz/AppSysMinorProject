@@ -128,7 +128,7 @@ include("header.php");
 				"orderable":false
 			}
 			],
-			"pageLength": 6
+			"pageLength": 10
 		});
 
 		$(document).on('submit', '#room_form', function(event){
