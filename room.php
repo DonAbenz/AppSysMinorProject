@@ -40,8 +40,8 @@ include("header.php");
 							<tr>
 								<th>Room Number</th>
 								<th>Room Type</th>
-								<th>Room Bedding</th>
 								<th>Status</th>
+								<th>Price</th>
                                 <?php
                                     if($_SESSION["type"] == 'master'){
                                 ?>
@@ -68,20 +68,15 @@ include("header.php");
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
+						<label>Room No</label>
+						<input type="number" name="room_no" id="room_no" class="form-control" required />
+					</div>
+					<div class="form-group">
 						<label>Room Type</label>
 						<select name="room_type">
-                            <option value="Regular Room">Regular Room</option>
-                            <option value="Deluxe Room">Deluxe Room</option>
-                            <option value="Premium Room">Premium Room</option>
-                        </select>
-					</div>
-                    <div class="form-group">
-						<label>Room Bedding</label>
-						<select name="room_bedding">
-                            <option value="Single">Single</option>
-                            <option value="Double">Double</option>
-                            <option value="Triple">Triple</option>
-                            <option value="Quad">Quad</option>
+                            <option value="Junior Suite">Junior Suite</option>
+                            <option value="Standard Room">Standard Room</option>
+                            <option value="Superior Room">Superior Room</option>
                         </select>
 					</div>
 					<div class="form-group">
@@ -91,7 +86,10 @@ include("header.php");
                             <option value="occupied">Occupied</option>
                         </select>
 					</div>
-
+					<div class="form-group">
+						<label>Room Price</label>
+						<input type="number" name="room_price" id="room_price" class="form-control" required />
+					</div>
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="room_id" id="room_id" />

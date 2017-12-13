@@ -7,12 +7,8 @@ if(!isset($_SESSION["type"]))
 	header('location:login.php');
 }
 
-if($_SESSION["type"] != 'master')
-{
-	header("location:index.php");
-}
-
 include("header.php");
+include("function.php");
 
 
 ?>
@@ -23,10 +19,10 @@ include("header.php");
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
-						<h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span> New Bookings</h3>
+						<h3 class="panel-title"><span class="glyphicon glyphicon-list-alt"></span> Check-In Lists</h3>
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right">
-						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#bookingModal" class="btn btn-success btn-xs">Add New Reservation</button>
+						<button type="button" name="add" id="add_button" data-toggle="modal" data-target="#bookingModal" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-calendar"></span> Add Check-In</button>
 					</div>
 				</div>
 
@@ -37,14 +33,12 @@ include("header.php");
 					<table id="booking_data" class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>ID</th>
 								<th>Name</th>
 								<th>Email</th>
-								<th>Bedding</th>
-                                <th>Room Type</th>
-								<th>Meal</th>
+                                <th>Room</th>
 								<th>Check In</th>
-								<th>Chech Out</th>
+								<th>Check Out</th>
+								<th></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -60,7 +54,7 @@ include("header.php");
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title"><i class="fa fa-plus"></i>New Reservation</h4>
+					<h4 class="modal-title"><i class="fa fa-plus"></i>Check-In</h4>
 				</div>
 				<div class="modal-body">
                     <div align="center" class="form-group">
@@ -81,49 +75,36 @@ include("header.php");
                     </div>
                     <div class="form-group">
                         <label>Phone Number</label>
-                        <input type="text" name="phoneno" class="form-control" required />
+                        <input type="number" name="phoneno" placeholder="09462556003" class="form-control" required />
                     </div>
                     <div align="center" class="form-group">
                         <hr />
-                            <h4>Reservation Information</h4>
+                            <h4>Check-In Information</h4>
                         <hr />
                     </div>
+					<?php
+					$output = fetch_room_details($connect);
+						// echo $output;
+                    	echo '<div class="form-group">';
+                        echo '<label>Select Room &nbsp;&nbsp;&nbsp;&nbsp;</label>';
+						echo '<select name="room_type">';
+						
+						foreach($output as $rows){
+						echo '<option value="'.$rows["room_no"].'">'.$rows["room_no"].' -- '.$rows["type"].'</option>';
+							// echo '<option value="Junior Suite">Junior Suite</option>';
+                            // echo '<option value="Standard Room">Standard Room</option>';
+							// echo '<option value="Superior Room">Superior Room</option>';
+						}
+                        echo '</select>';
+                    	echo '</div>';
+						
+						$currentdate = date("Y-m-d");
+					?>
                     <div class="form-group">
-                        <label>Type of Room</label>
-                        <select name="room_type">
-                            <option value="Regular Room">Regular Room</option>
-                            <option value="Deluxe Room">Deluxe Room</option>
-                            <option value="Premium Room">Premium Room</option>
-                        </select>
-                        <label style="margin-left:20px">Type of Bedding</label>
-                        <select name="room_bedding">
-                            <option value="Single">Single</option>
-                            <option value="Double">Double</option>
-                            <option value="Triple">Triple</option>
-                            <option value="Quad">Quad</option>
-                        </select>
-                    </div>
-                    <div class="form-group">    
-                        <label>Number of Rooms</label>
-                        <select name="number_of_room">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                        <label style="margin-left:20px">Meal Plan</label>
-                        <select name="meal">
-                            <option value="Room only">Room only</option>
-                            <option value="Breakfast">Breakfast</option>
-                            <option value="Half Board">Half Board</option>
-                            <option value="Full Board">Full Board</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Check-In</label>
-                        <input type="date" name="cin" class="form-control" required />
+                        <!-- <label>Check-In</label>
+                        <input type="date" name="cin" class="form-control" required /> -->
                         <label>Check-Out</label>
-                        <input type="date" name="cout" class="form-control" required />
+                        <input type="date" name="cout" class="form-control" min="<?php echo $currentdate;?>" required />
                     </div>
                 </div>
 				<div class="modal-footer">
@@ -142,7 +123,7 @@ include("header.php");
 
 		$('#add_button').click(function(){
 			$('#user_form')[0].reset();
-			$('.modal-title').html("<i class='fa fa-plus'></i>Add Reservation");
+			$('.modal-title').html("<i class='fa fa-plus'></i>Check-In");
 			$('#action').val("Add");
 			$('#btn_action').val("Add");
 		});
@@ -184,15 +165,39 @@ include("header.php");
 		});
 		
 		
-		$(document).on('click', '.delete', function(){
+		$(document).on('click', '.info', function(){
 			var book_id = $(this).attr("book_id");
-			var btn_action = "delete";
-			if(confirm("Confirm booking?"))
+			var btn_action = "info";
+			if(confirm("Confirm Check-In?"))
 			{
 				$.ajax({
 					url:"booking_action.php",
 					method:"POST",
-					data:{book_id:book_id, btn_action:btn_action},
+					data:{book_id:book_id,btn_action:btn_action},
+					success:function(data)
+					{
+						location.reload(true);
+						$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+						
+						userdataTable.ajax.reload();
+					}
+				})
+			}
+			else
+			{
+				return false;
+			}
+		});
+
+		$(document).on('click', '.delete', function(){
+			var book_id = $(this).attr("book_id");
+			var btn_action = "delete";
+			if(confirm("Cancel Check-In?"))
+			{
+				$.ajax({
+					url:"booking_action.php",
+					method:"POST",
+					data:{book_id:book_id,btn_action:btn_action},
 					success:function(data)
 					{
 						$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');

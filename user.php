@@ -1,6 +1,6 @@
 <?php require_once("connect.php"); ?>
 <?php
-//user.php
+// user.php
 
 if(!isset($_SESSION["type"]))
 {
@@ -73,6 +73,10 @@ include("header.php");
 						<label>Enter User Password</label>
 						<input type="password" name="user_password" id="user_password" class="form-control" required />
 					</div>
+					<div class="form-group">
+						<label>Confirm User Password</label>
+						<input type="password" name="confirm_user_password" id="confirm_user_password" class="form-control" required />
+					</div>
 				</div>
 				<div class="modal-footer">
 					<input type="hidden" name="user_id" id="user_id" />
@@ -114,6 +118,9 @@ include("header.php");
 
 		$(document).on('submit', '#user_form', function(event){
 			event.preventDefault();
+
+
+			
 			$('#action').attr('disabled','disabled');
 			var form_data = $(this).serialize();
 			$.ajax({

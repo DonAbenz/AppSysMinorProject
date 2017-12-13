@@ -30,13 +30,12 @@ include("header.php");
 						<thead>
 							<tr>
 								<th>Customer Name</th>
-								<th>Type of Room</th>
-								<th>Bed Type</th>
-								<th>No. of Room</th>
+								<th>Room</th>
 								<th>Check in Date</th>
 								<th>Check out Date</th>
-								<th>Meal</th>
 								<th>No. of Days</th>
+								<th>Payment Status</th>
+								<th></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -93,35 +92,15 @@ include("header.php");
 			})
 		});
 
-		$(document).on('click', '.update', function(){
-			var room_id = $(this).attr("id");
-			var btn_action = 'fetch_single';
-			$.ajax({
-				url:"room_action.php",
-				method:"POST",
-				data:{room_id:room_id, btn_action:btn_action},
-				dataType:"json",
-				success:function(data)
-				{
-					$('#roomModal').modal('show');
-					$('#room_type').val(data.room_type);
-					$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Room");
-					$('#room_id').val(room_id);
-					$('#action').val('Edit');
-					$('#btn_action').val('Edit');
-				}
-			})
-		});
-
 		$(document).on('click', '.delete', function(){
-			var room_id = $(this).attr("id");
+			var id = $(this).attr("id");
 			var btn_action = "delete";
 			if(confirm("Are you sure you want to delete this room?"))
 			{
 				$.ajax({
-					url:"room_action.php",
+					url:"payment_action.php",
 					method:"POST",
-					data:{room_id:room_id, btn_action:btn_action},
+					data:{id:id, btn_action:btn_action},
 					success:function(data)
 					{
 						$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');

@@ -1,7 +1,10 @@
 <?php require_once("connect.php"); ?>
 <?php
 
-//user_fetch.php
+if(!isset($_SESSION["type"]))
+{
+	header('location:login.php');
+}
 
 $query = '';
 

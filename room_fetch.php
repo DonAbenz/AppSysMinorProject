@@ -1,7 +1,10 @@
 <?php require_once("connect.php"); ?>
 <?php
 
-//user_fetch.php
+if(!isset($_SESSION["type"]))
+{
+	header('location:login.php');
+}
 
 $query = '';
 
@@ -12,8 +15,8 @@ SELECT * FROM room WHERE";
 
 if(isset($_POST["search"]["value"]))
 {	
-	$query .= '(type LIKE "%'.$_POST["search"]["value"].'%" ';
-	$query .= 'OR bedding LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= '(room_id LIKE "%'.$_POST["search"]["value"].'%" ';
+	$query .= 'OR type LIKE "%'.$_POST["search"]["value"].'%" ';
 	$query .= 'OR place LIKE "%'.$_POST["search"]["value"].'%") ';
 }
 
@@ -23,7 +26,7 @@ if(isset($_POST["order"]))
 }
 else
 {
-	$query .= 'ORDER BY id DESC ';
+	$query .= 'ORDER BY room_id DESC ';
 }
 
 if($_POST["length"] != -1)
@@ -53,12 +56,12 @@ foreach($result as $row)
 		$status = '<span class="label label-danger">Occupied</span>';
 	}
 	$sub_array = array();
-	$sub_array[] = $row['id'];
+	$sub_array[] = $row['room_no'];
 	$sub_array[] = $row['type'];
-	$sub_array[] = $row['bedding'];
 	$sub_array[] = $status;
-	$sub_array[] = '<button type="button" name="update" id="'.$row["id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit"></span> Update</button>';
-	$sub_array[] = '<button type="button" name="delete" id="'.$row["id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["place"].'"><span class="glyphicon glyphicon-trash"></span> Delete</button>';
+	$sub_array[] = 'Php&nbsp;'.$row['price'];
+	$sub_array[] = '<button type="button" name="update" id="'.$row["room_id"].'" class="btn btn-warning btn-xs update"><span class="glyphicon glyphicon-edit"></span> Update</button>';
+	$sub_array[] = '<button type="button" name="delete" id="'.$row["room_id"].'" class="btn btn-danger btn-xs delete" data-status="'.$row["place"].'"><span class="glyphicon glyphicon-trash"></span> Delete</button>';
 	$data[] = $sub_array;
 }
 

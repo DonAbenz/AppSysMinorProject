@@ -1,30 +1,40 @@
 <?php require_once("connect.php"); ?>
 <?php
-//user_action.php
+if(!isset($_SESSION["type"]))
+{
+	header('location:login.php');
+}
 
 if(isset($_POST['btn_action'])){
 
     if($_POST['btn_action'] == 'Add')
     {
-        $query = "
-        INSERT INTO user_details (user_email, user_password, user_name, user_type, user_status) 
-        VALUES (:user_email, :user_password, :user_name, :user_type, :user_status)
-        "; 
-        $statement = $connect->prepare($query);
-        $statement->execute(
-            array(
-                ':user_email'  => $_POST["user_email"],
-                ':user_password' => password_hash($_POST["user_password"], PASSWORD_DEFAULT),
-                ':user_name'  => $_POST["user_name"],
-                ':user_type'  => 'user',
-                ':user_status'  => 'active'
-            )
-        );
-        $result = $statement->fetchAll();
-        if(isset($result))
-        {
-            echo 'New User Added';
+
+        if($_POST["user_password"] != $_POST["confirm_user_password"]){
+            echo "Password Doesn't Match!";
+        }else{
+            $query = "
+            INSERT INTO user_details (user_email, user_password, user_name, user_type, user_status) 
+            VALUES (:user_email, :user_password, :user_name, :user_type, :user_status)
+            "; 
+            $statement = $connect->prepare($query);
+            $statement->execute(
+                array(
+                    ':user_email'  => $_POST["user_email"],
+                    ':user_password' => password_hash($_POST["user_password"], PASSWORD_DEFAULT),
+                    ':user_name'  => $_POST["user_name"],
+                    ':user_type'  => 'user',
+                    ':user_status'  => 'active'
+                )
+            );
+            $result = $statement->fetchAll();
+            if(isset($result))
+            {
+                echo 'New User Added';
+            }
         }
+        
+      
     }
     if($_POST['btn_action'] == 'fetch_single')
     {
@@ -47,32 +57,33 @@ if(isset($_POST['btn_action'])){
     }
     if($_POST['btn_action'] == 'Edit')
     {
-        if($_POST['user_password'] != '')
-        {
-            $query = "
-            UPDATE user_details SET 
-            user_name = '".$_POST["user_name"]."', 
-            user_email = '".$_POST["user_email"]."',
-            user_password = '".password_hash($_POST["user_password"], PASSWORD_DEFAULT)."' 
-            WHERE user_id = '".$_POST["user_id"]."'
-            ";
+
+        if($_POST["user_password"] != $_POST["confirm_user_password"]){
+            echo "Password Doesn't Match!";
+        }else{
+
+            if($_POST['user_password'] != '')
+            {
+                $query = "
+                UPDATE user_details SET 
+                user_name = '".$_POST["user_name"]."', 
+                user_email = '".$_POST["user_email"]."',
+                user_password = '".password_hash($_POST["user_password"], PASSWORD_DEFAULT)."' 
+                WHERE user_id = '".$_POST["user_id"]."'
+                ";
+            }
+            $statement = $connect->prepare($query);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if(isset($result))
+            {
+                echo 'User Details Edited';
+            }else{
+                echo "Edit Failed";
+
+            }
         }
-        else
-        {
-            $query = "
-            UPDATE user_details SET 
-            user_name = '".$_POST["user_name"]."', 
-            user_email = '".$_POST["user_email"]."'
-            WHERE user_id = '".$_POST["user_id"]."'
-            ";
-        }
-        $statement = $connect->prepare($query);
-        $statement->execute();
-        $result = $statement->fetchAll();
-        if(isset($result))
-        {
-            echo 'User Details Edited';
-        }
+        
     }
 
     if($_POST['btn_action'] == 'change'){

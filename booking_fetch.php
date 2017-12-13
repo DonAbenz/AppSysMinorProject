@@ -1,15 +1,18 @@
 <?php require_once("connect.php"); ?>
 <?php
 
-//user_fetch.php
+if(!isset($_SESSION["type"]))
+{
+	header('location:login.php');
+}
 
 $query = '';
 
 $output = array();
 
 $query .= "
-SELECT * FROM roombook 
-WHERE stat = 'Not Confirm' AND
+SELECT * FROM roombook INNER JOIN room ON roombook.room_no = room.room_no
+WHERE roombook.stat = 'Not Confirm' AND
 ";
 
 if(isset($_POST["search"]["value"]))
@@ -20,7 +23,7 @@ if(isset($_POST["search"]["value"]))
     $query .= 'OR id LIKE "%'.$_POST["search"]["value"].'%" ';
     $query .= 'OR cin LIKE "%'.$_POST["search"]["value"].'%" ';
     $query .= 'OR cout LIKE "%'.$_POST["search"]["value"].'%" ';
-    $query .= 'OR TRoom LIKE "%'.$_POST["search"]["value"].'%" ';
+    // $query .= 'OR room.type LIKE "%'.$_POST["search"]["value"].'%" ';
 	$query .= 'OR stat LIKE "%'.$_POST["search"]["value"].'%") ';
 }
 
@@ -50,17 +53,22 @@ $filtered_rows = $statement->rowCount();
 
 foreach($result as $row)
 {
-	
+	// <th>Booking ID</th>
+	// <th>Name</th>
+	// <th>Email</th>
+	// <th>Room</th>
+	// <th>Check In</th>
+	// <th>Check Out</th>
+	// <th>Payment Status</th>
+	// <th></th>
 	$sub_array = array();
-	$sub_array[] = $row['id'];
 	$sub_array[] = $row['FName'];
-    $sub_array[] = $row['Email'];
-    $sub_array[] = $row['Bed'];
-    $sub_array[] = $row['TRoom'];
-    $sub_array[] = $row['Meal'];
+	$sub_array[] = $row['Email'];
+    $sub_array[] = $row['room_no'].', '.$row['type'];
     $sub_array[] = $row['cin'];
-    $sub_array[] = $row['cout'];
-	$sub_array[] = '<button type="button" name="delete" book_id="'.$row["id"].'" class="btn btn-danger btn-xs delete" data-status="'.'"><span class="glyphicon glyphicon-remove"></span> Delete</button>';
+	$sub_array[] = $row['cout'];
+	$sub_array[] = '<button type="button" name="info" book_id="'.$row["id"].'" class="btn btn-info btn-xs info" data-status="'.'"><span class="glyphicon glyphicon-thumbs-up"></span> Confirm Check-In</button>';
+	$sub_array[] = '<button type="button" name="delete" book_id="'.$row["id"].'" class="btn btn-delete btn-xs delete" data-status="'.'"><span class="glyphicon glyphicon-trash"></span> Cancel Check-In</button>';
 	$data[] = $sub_array;
 }
 

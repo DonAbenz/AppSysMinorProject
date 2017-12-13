@@ -1,20 +1,24 @@
 <?php require_once("connect.php"); ?>
 <?php
-//user_action.php
+if(!isset($_SESSION["type"]))
+{
+	header('location:login.php');
+}
 
 if(isset($_POST['btn_action'])){
 
     if($_POST['btn_action'] == 'Add')
     {
         $query = "
-        INSERT INTO room (type, bedding, place) 
-        VALUES (:room_type, :bedding, :place)
+        INSERT INTO room (room_no, type, place, price) 
+        VALUES (:room_no, :room_type, :place, :price)
         "; 
         $statement = $connect->prepare($query);
         $statement->execute(
             array(
                 ':room_type'  => $_POST["room_type"],
-                ':bedding'  => $_POST["room_bedding"],
+                ':room_no'  => $_POST["room_no"],
+                ':price'  => $_POST["room_price"],
                 ':place'  => $_POST["room_status"]
             )
         );
@@ -26,7 +30,7 @@ if(isset($_POST['btn_action'])){
     }
     if($_POST['btn_action'] == 'fetch_single'){
         $query = "
-        SELECT * FROM room WHERE id = :id
+        SELECT * FROM room WHERE room_id = :id
         ";
         $statement = $connect->prepare($query);
         $statement->execute(
@@ -38,7 +42,7 @@ if(isset($_POST['btn_action'])){
         foreach($result as $row)
         {
             $output['room_type'] = $row['type'];
-            $output['room_bedding'] = $row['bedding'];
+            $output['room_price'] = $row['price'];
             $output['room_status'] = $row['place'];
         }
         echo json_encode($output);
@@ -49,9 +53,9 @@ if(isset($_POST['btn_action'])){
         $query = "
         UPDATE room SET 
         type = '".$_POST["room_type"]."', 
-        bedding = '".$_POST["room_bedding"]."',
-        place = '".$_POST["room_status"]."'
-        WHERE id = '".$_POST["room_id"]."'";
+        place = '".$_POST["room_status"]."',
+        price = '".$_POST["room_price"]."' 
+        WHERE room_id = '".$_POST["room_id"]."'";
        
         $statement = $connect->prepare($query);
         $statement->execute();
@@ -65,7 +69,7 @@ if(isset($_POST['btn_action'])){
     if($_POST['btn_action'] == 'delete'){
         $query = "
         DELETE FROM room
-        WHERE id = :id
+        WHERE room_id = :id
         ";
         $statement = $connect->prepare($query);
         $statement->execute(

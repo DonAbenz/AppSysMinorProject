@@ -9,10 +9,9 @@ if(!isset($_SESSION["type"]))
 $query = '';
 
 $output = array();
-
 $query .= "
 SELECT * FROM roombook INNER JOIN room ON room.room_no = roombook.room_no
-WHERE stat = 'Confirmed' AND";
+WHERE stat = 'Confirmed' AND pay_stat = 'Pending' AND";
 
 if(isset($_POST["search"]["value"]))
 {	
@@ -51,16 +50,18 @@ $filtered_rows = $statement->rowCount();
 
 foreach($result as $row)
 {
-
+	// <th>Customer Name</th>
+	// <th>Email</th>
+	// <th>Phone</th>
+	// <th>Room</th>
+	// <th>Check out Date</th>
 	$sub_array = array();
-	$sub_array[] = $row['FName'].'&nbsp;&nbsp;'.$row['LName'];
-    $sub_array[] = $row['room_no'].' -- '.$row['type'];
-    $sub_array[] = $row['cin'];
+    $sub_array[] = $row['FName'].'&nbsp;&nbsp;'.$row['LName'];
+	$sub_array[] = $row['Email'];
+	$sub_array[] = $row['Phone'];
+	$sub_array[] = $row['room_no'].' -- '.$row['type'];
+	$sub_array[] = $row['cin'];
     $sub_array[] = $row['cout'];
-    $sub_array[] = $row['nodays'];
-	$sub_array[] = $row['pay_stat'];
-	$sub_array[] = '<button type="button" name="delete" id="'.$row["id"].'" class="btn btn-delete btn-xs delete" data-status="'.'"><span class="glyphicon glyphicon-credit-card"></span> Confirm Payment</button>';
-	$sub_array[] = '<a href="payment_order.php?pdf=1&id='.$row["id"].'" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-print"></span> View PDF</a>';
 	$data[] = $sub_array;
 }
 

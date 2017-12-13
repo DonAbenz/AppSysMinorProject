@@ -1,10 +1,13 @@
 <?php
-//header.php
+if(!isset($_SESSION["type"]))
+{
+	header('location:login.php');
+}
 ?>
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Hotel Management System</title>
+		<title>Fleur Suites</title>
 		<script src="js/jquery-3.2.1.min.js"></script>
 		<link rel="stylesheet" href="css/bootstrap.min.css" />
 		<script src="js/jquery.dataTables.min.js"></script>
@@ -15,7 +18,7 @@
 	<body>
 		<br />
 		<div class="container">
-			<h2 align="center">Hotel Management System</h2>
+			<h2 align="center">Fleur Suites</h2>
 
 			<nav class="navbar navbar-inverse">
 				<div class="container-fluid">
@@ -27,16 +30,16 @@
 						if($_SESSION['type'] == 'master'){
 							?>
 							<li><a href="room.php"><span class="glyphicon glyphicon-tag"></span> Rooms</a></li>
-							<li><a href="booking.php"><span class="glyphicon glyphicon-calendar"></span> Booking</a></li>
+							<li><a href="booking.php"><span class="glyphicon glyphicon-calendar"></span> Check-In</a></li>
 							<li><a href="payment.php"><span class="glyphicon glyphicon-usd"></span> Payment</a></li>
 							<li><a href="user.php"> <span class="glyphicon glyphicon-user"></span> User</a></li>
 							<?php
 						}else{
 							?>
 							<li><a href="room.php"><span class="glyphicon glyphicon-tag"></span> Rooms</a></li>
-							<li><a href="booking.php"><span class="glyphicon glyphicon-calendar"></span> Booking</a></li>
+							<li><a href="booking.php"><span class="glyphicon glyphicon-calendar"></span> Check-In</a></li>
 							<li><a href="payment.php"><span class="glyphicon glyphicon-usd"></span> Payment</a></li>
-							<li><a href="#">Next Checkouts</a></li>
+						
 							<?php
 						}
 						?>
